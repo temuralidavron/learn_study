@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Learning Center</title>
+
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:Arial, Helvetica, sans-serif;
+        }
+
+        body{
+            background:#f4f6f9;
+        }
+
+        /* Sidebar */
+
+        .sidebar{
+            position:fixed;
+            top:0;
+            left:0;
+            width:260px;
+            height:100vh;
+            background:#1e293b;
+            overflow-y:auto;
+        }
+
+        .logo{
+            color:white;
+            font-size:24px;
+            font-weight:bold;
+            text-align:center;
+            padding:25px 15px;
+            border-bottom:1px solid rgba(255,255,255,.1);
+        }
+
+        .nav-links{
+            list-style:none;
+        }
+
+        .nav-links li{
+            width:100%;
+        }
+
+        .nav-links li a{
+            display:block;
+            color:white;
+            text-decoration:none;
+            padding:15px 22px;
+            transition:.3s;
+        }
+
+        .nav-links li a:hover{
+            background:#334155;
+        }
+
+        /* Dropdown */
+
+        .dropdown-menu{
+            list-style:none;
+            background:#29384b;
+            display:none;
+        }
+
+        .dropdown-menu li a{
+            padding:13px 40px;
+            font-size:14px;
+        }
+
+        .dropdown:hover .dropdown-menu{
+            display:block;
+        }
+
+        /* Main Content */
+
+        .main-content{
+            margin-left:260px;
+            padding:30px;
+        }
+
+        /* Responsive */
+
+        @media(max-width:768px){
+
+            .sidebar{
+                position:relative;
+                width:100%;
+                height:auto;
+            }
+
+            .main-content{
+                margin-left:0;
+            }
+        }
+
+    </style>
+
+</head>
+<body>
+
+<div class="sidebar">
+
+    <div class="logo">
+        Learning Center
+    </div>
+
+    <ul class="nav-links">
+
+        <li>
+            <a href="{% url 'base' %}">Home</a>
+        </li>
+
+        {% if request.user.is_authenticated %}
+        <li>
+            <a href="{% url 'register' %}">
+                {{ request.user.get_full_name|default:request.user.username }}
+                {{ request.user.role }}
+            </a>
+        </li>
+        {% endif %}
+
+        {% if request.user.is_authenticated %}
+        <li>
+            <a href="{% url 'logout' %}">Logout</a>
+        </li>
+        {% else %}
+        <li>
+            <a href="{% url 'login' %}">Login</a>
+        </li>
+        {% endif %}
+
+        <li class="dropdown">
+            <a href="#">Centers ▼</a>
+
+            <ul class="dropdown-menu">
+                <li><a href="#">Centers</a></li>
+                <li><a href="#">Branches</a></li>
+            </ul>
+        </li>
+
+        <li class="dropdown">
+            <a href="#">Education ▼</a>
+
+            <ul class="dropdown-menu">
+                <li><a href="{% url 'course_list' %}">Courses</a></li>
+                <li><a href="#">Groups</a></li>
+            </ul>
+        </li>
+
+        <li class="dropdown">
+            <a href="#">Lesson ▼</a>
+
+            <ul class="dropdown-menu">
+                <li><a href="#">Modules</a></li>
+                <li><a href="#">Room Types</a></li>
+                <li><a href="#">Rooms</a></li>
+                <li><a href="#">Lessons</a></li>
+                <li><a href="#">Homework</a></li>
+            </ul>
+        </li>
+
+        <li class="dropdown">
+            <a href="#">Accounts ▼</a>
+
+            <ul class="dropdown-menu">
+                <li><a href="#">Employees</a></li>
+                <li><a href="#">Students</a></li>
+                <li><a href="#">Teachers</a></li>
+                <li><a href="#">Departments</a></li>
+                <li><a href="#">Specializations</a></li>
+            </ul>
+        </li>
+
+    </ul>
+
+</div>
+
+<div class="main-content">
+
+    {% block content %}
+    {% endblock %}
+
+</div>
+
+</body>
+</html>
