@@ -1,9 +1,101 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 {% block content %}
-  <h4>Register</h4>
-<form method="post">
-  {% csrf_token %}
-  <p>{{ form.as_p }}</p>
-  <button type="submit">send</button>
-</form>
+<div class="auth-wrap">
+  <div class="auth-card">
+    <h1>Ro'yxatdan o'tish</h1>
+    <form method="post" class="auth-form">
+      {% csrf_token %}
+      {% for field in form %}
+        <div class="form-group">
+          {{ field.label_tag }}
+          {{ field }}
+          {% if field.errors %}
+            <div class="field-error">{{ field.errors|striptags }}</div>
+          {% endif %}
+          {% if field.help_text %}
+            <small class="help-text">{{ field.help_text }}</small>
+          {% endif %}
+        </div>
+      {% endfor %}
+      <button type="submit" class="btn-submit">Saqlash</button>
+    </form>
+  </div>
+</div>
+
+<style>
+.auth-wrap {
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+.auth-card {
+  width: 100%;
+  max-width: 380px;
+  background: #fff;
+  border: 1px solid #e2e2e2;
+  border-radius: 12px;
+  padding: 32px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+.auth-card h1 {
+  font-size: 22px;
+  margin: 0 0 24px;
+  text-align: center;
+}
+.form-group {
+  margin-bottom: 16px;
+}
+.form-group label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #333;
+}
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #d0d0d0;
+  border-radius: 8px;
+  font-size: 14px;
+  box-sizing: border-box;
+  transition: border-color 0.15s;
+}
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #4a6cf7;
+}
+.field-error {
+  color: #d93025;
+  font-size: 12px;
+  margin-top: 4px;
+}
+.help-text {
+  display: block;
+  color: #888;
+  font-size: 12px;
+  margin-top: 4px;
+}
+.btn-submit {
+  width: 100%;
+  padding: 12px;
+  background: #4a6cf7;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 8px;
+}
+.btn-submit:hover {
+  background: #3a5ce0;
+}
+</style>
 {% endblock %}

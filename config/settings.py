@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'normativ',
     'coins',
     'news',
+    "rest_framework",
 ]
 
 AUTH_USER_MODEL = 'accounts.CustomUser'

@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="kanban-wrap">
+  <div class="kanban-header">
+    <h1>Xonalar</h1>
+    <a href="{% url 'room-create' %}" class="btn-add">+ Yangi xona</a>
+  </div>
+
+  <div class="kanban-board">
+    {% for room in rooms %}
+      <div class="kanban-card">
+        <div class="card-top">
+          <span class="room-name">{{ room.name }}</span>
+          <span class="room-capacity">{{ room.capacity }} kishi</span>
+        </div>
+        <div class="card-actions">
+          <a href="{% url 'room-update' room.pk %}" class="btn-edit">Tahrirlash</a>
+          <a href="{% url 'room-delete' room.pk %}" class="btn-delete">O'chirish</a>
+        </div>
+      </div>
+    {% empty %}
+      <p class="empty-state">Hozircha xonalar yo'q.</p>
+    {% endfor %}
+  </div>
+</div>
+
+<style>
+.kanban-wrap {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px;
+}
+.kanban-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+.kanban-header h1 {
+  font-size: 22px;
+  margin: 0;
+}
+.btn-add {
+  background: #4a6cf7;
+  color: #fff;
+  text-decoration: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+}
+.btn-add:hover {
+  background: #3a5ce0;
+}
+.kanban-board {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+}
+.kanban-card {
+  background: #fff;
+  border: 1px solid #e2e2e2;
+  border-radius: 10px;
+  padding: 16px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.card-top {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.room-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: #222;
+}
+.room-capacity {
+  font-size: 13px;
+  color: #666;
+}
+.card-actions {
+  display: flex;
+  gap: 8px;
+  border-top: 1px solid #f0f0f0;
+  padding-top: 10px;
+}
+.card-actions a {
+  font-size: 12px;
+  text-decoration: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+}
+.btn-edit {
+  background: #eef1ff;
+  color: #4a6cf7;
+}
+.btn-delete {
+  background: #fdeeee;
+  color: #d93025;
+}
+.empty-state {
+  color: #999;
+  font-size: 14px;
+}
+</style>
+{% endblock %}

@@ -1,12 +1,12 @@
 from django.urls import path
 
-from courses.views import course
+from courses.views.room import list_rooms, create_room, room_update, delete_room
 
 urlpatterns = [
-    path('create/', course.create_course,name="create_course"),
-    path('list/', course.course_list,name="course_list"),
-    path('course_detail/<int:pk>/', course.course_detail,name="course_detail"),
-    path('course_edit/<int:pk>/', course.course_edit,name="course_edit"),
-    path('course_delete/<int:pk>/', course.course_delete,name="course_delete"),
+    path('list/', list_rooms,name='rooms'),
+    path('create/', create_room,name='room-create'),
+    path('update/<int:pk>/', room_update,name='room-update'),
+    path('delete/<int:pk>/', delete_room,name='room-delete'),
+
 
 ]

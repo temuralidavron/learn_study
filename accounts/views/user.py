@@ -4,6 +4,10 @@ from django.shortcuts import redirect, render
 from accounts.forms.user import CustomUseForm, LoginForm
 from accounts.models import TeacherProfile
 
+def dashboard(request):
+    return render(request,"base.html")
+
+
 
 def create_user(request):
     if request.method=="POST":
@@ -17,7 +21,7 @@ def create_user(request):
             # TeacherProfile.objects.create(user=user)
             if user:
                 login(request,user)
-                return redirect("base")
+                return redirect("dashboard")
     else:
         form=CustomUseForm()
     return render(request,"accounts/register.html",{'form':form})
