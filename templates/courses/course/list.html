@@ -1,0 +1,504 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="kanban-wrap">
+
+  <!-- Header -->
+  <div class="kanban-header">
+    <div>
+      <h1>Kurslar</h1>
+      <p class="page-subtitle">Barcha kurslarni boshqarish</p>
+    </div>
+
+    <a href="{% url 'create_course' %}" class="btn-add">
+      <span>+</span>
+      Yangi Kurs
+    </a>
+  </div>
+
+
+  <!-- Kanban -->
+  <div class="kanban-board">
+
+    {% for course in courses %}
+
+      <div class="kanban-card">
+
+        <!-- Card Header -->
+        <div class="card-header">
+          <div class="course-icon">
+            📚
+          </div>
+
+          <div class="course-status">
+            Faol
+          </div>
+        </div>
+
+
+        <!-- Card Content -->
+        <div class="card-content">
+
+          <h3 class="course-title">
+            {{ course.title }}
+          </h3>
+
+          <p class="course-description">
+            {{ course.description }}
+          </p>
+
+
+          <div class="course-info">
+
+            <div class="info-item">
+              <span class="info-label">
+                Davomiyligi
+              </span>
+
+              <span class="info-value">
+                {{ course.duration_months }} oy
+              </span>
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- Card Actions -->
+        <div class="card-actions">
+
+          <a href="#" class="btn-edit">
+            ✏️ Tahrirlash
+          </a>
+
+          <a href="#" class="btn-delete">
+            🗑 O'chirish
+          </a>
+
+        </div>
+
+      </div>
+
+    {% empty %}
+
+      <div class="empty-state">
+
+        <div class="empty-icon">
+          📚
+        </div>
+
+        <h3>Kurslar mavjud emas</h3>
+
+        <p>
+          Hozircha hech qanday kurs qo'shilmagan.
+        </p>
+
+        <a href="{% url 'create_course' %}" class="btn-add">
+          + Birinchi kursni qo'shish
+        </a>
+
+      </div>
+
+    {% endfor %}
+
+  </div>
+
+</div>
+
+
+<style>
+
+/* =========================
+   MAIN
+========================= */
+
+.kanban-wrap {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 30px;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.kanban-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 28px;
+}
+
+.kanban-header h1 {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0;
+
+  color: #1f2937;
+}
+
+.page-subtitle {
+  margin: 6px 0 0;
+
+  font-size: 14px;
+  color: #8b95a5;
+}
+
+
+/* =========================
+   ADD BUTTON
+========================= */
+
+.btn-add {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+
+  background: #4a6cf7;
+  color: #ffffff;
+
+  text-decoration: none;
+
+  padding: 11px 18px;
+
+  border-radius: 9px;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  transition: all 0.2s ease;
+}
+
+.btn-add:hover {
+  background: #3d5de0;
+
+  transform: translateY(-1px);
+
+  box-shadow: 0 5px 15px rgba(74, 108, 247, 0.25);
+}
+
+
+/* =========================
+   KANBAN BOARD
+
+   MUHIM:
+   HAR QATORDA 3 TA
+========================= */
+
+.kanban-board {
+  display: grid;
+
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+
+  gap: 20px;
+
+  align-items: stretch;
+}
+
+
+/* =========================
+   CARD
+========================= */
+
+.kanban-card {
+  background: #ffffff;
+
+  border: 1px solid #e7eaf0;
+
+  border-radius: 14px;
+
+  padding: 20px;
+
+  min-height: 230px;
+
+  display: flex;
+  flex-direction: column;
+
+  transition: all 0.25s ease;
+
+  box-shadow:
+    0 2px 5px rgba(0, 0, 0, 0.02),
+    0 6px 15px rgba(0, 0, 0, 0.03);
+}
+
+.kanban-card:hover {
+  transform: translateY(-4px);
+
+  border-color: #d9dff7;
+
+  box-shadow:
+    0 6px 15px rgba(0, 0, 0, 0.05),
+    0 12px 30px rgba(0, 0, 0, 0.06);
+}
+
+
+/* =========================
+   CARD HEADER
+========================= */
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 18px;
+}
+
+.course-icon {
+  width: 42px;
+  height: 42px;
+
+  border-radius: 10px;
+
+  background: #eef1ff;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 19px;
+}
+
+.course-status {
+  padding: 5px 10px;
+
+  border-radius: 20px;
+
+  background: #ecfdf3;
+
+  color: #16a34a;
+
+  font-size: 11px;
+
+  font-weight: 600;
+}
+
+
+/* =========================
+   CONTENT
+========================= */
+
+.card-content {
+  flex: 1;
+}
+
+.course-title {
+  margin: 0 0 8px;
+
+  font-size: 18px;
+  font-weight: 700;
+
+  color: #222b3c;
+
+  line-height: 1.4;
+}
+
+.course-description {
+  margin: 0 0 20px;
+
+  font-size: 13px;
+
+  color: #777f8f;
+
+  line-height: 1.6;
+
+  display: -webkit-box;
+
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+
+  overflow: hidden;
+}
+
+
+/* =========================
+   COURSE INFORMATION
+========================= */
+
+.course-info {
+  background: #f8f9fc;
+
+  border-radius: 9px;
+
+  padding: 11px 13px;
+
+  margin-bottom: 16px;
+}
+
+.info-item {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  gap: 10px;
+}
+
+.info-label {
+  font-size: 12px;
+
+  color: #8b95a5;
+}
+
+.info-value {
+  font-size: 13px;
+
+  font-weight: 600;
+
+  color: #374151;
+}
+
+
+/* =========================
+   ACTIONS
+========================= */
+
+.card-actions {
+  display: flex;
+
+  gap: 10px;
+
+  padding-top: 15px;
+
+  border-top: 1px solid #edf0f5;
+}
+
+.card-actions a {
+  flex: 1;
+
+  text-align: center;
+
+  text-decoration: none;
+
+  font-size: 12px;
+
+  font-weight: 600;
+
+  padding: 8px 10px;
+
+  border-radius: 7px;
+
+  transition: 0.2s ease;
+}
+
+
+/* EDIT */
+
+.btn-edit {
+  background: #eef1ff;
+
+  color: #4a6cf7;
+}
+
+.btn-edit:hover {
+  background: #dfe5ff;
+}
+
+
+/* DELETE */
+
+.btn-delete {
+  background: #fff0f0;
+
+  color: #e5484d;
+}
+
+.btn-delete:hover {
+  background: #ffe0e0;
+}
+
+
+/* =========================
+   EMPTY
+========================= */
+
+.empty-state {
+  grid-column: 1 / -1;
+
+  padding: 60px 30px;
+
+  text-align: center;
+
+  background: #ffffff;
+
+  border: 1px dashed #d7dce5;
+
+  border-radius: 14px;
+}
+
+.empty-icon {
+  font-size: 40px;
+
+  margin-bottom: 12px;
+}
+
+.empty-state h3 {
+  margin: 0 0 7px;
+
+  font-size: 18px;
+
+  color: #374151;
+}
+
+.empty-state p {
+  margin: 0 0 20px;
+
+  font-size: 13px;
+
+  color: #8b95a5;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+/* Tablet = 2 ta */
+
+@media (max-width: 900px) {
+
+  .kanban-board {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+}
+
+
+/* Mobile = 1 ta */
+
+@media (max-width: 600px) {
+
+  .kanban-wrap {
+    padding: 18px;
+  }
+
+  .kanban-header {
+    align-items: flex-start;
+    gap: 15px;
+
+    flex-direction: column;
+  }
+
+  .kanban-header h1 {
+    font-size: 24px;
+  }
+
+  .btn-add {
+    width: 100%;
+
+    justify-content: center;
+  }
+
+  .kanban-board {
+    grid-template-columns: 1fr;
+  }
+
+}
+
+</style>
+
+{% endblock %}

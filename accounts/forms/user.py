@@ -6,7 +6,7 @@ from accounts.models import CustomUser, TeacherProfile, StudentProfile
 
 
 class CustomUseForm(forms.ModelForm):
-    is_teacher=forms.BooleanField()
+    is_teacher=forms.BooleanField(required=False)
     class Meta:
         model = CustomUser
         fields = [

@@ -1,0 +1,338 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="manage-wrap">
+
+  <div class="manage-header">
+    <div>
+      <h1>{{ group.name }}</h1>
+      <p class="page-subtitle">Studentlarni boshqarish</p>
+    </div>
+    <a href="{% url 'group-list' %}" class="btn-back">← Guruhlarga qaytish</a>
+  </div>
+
+  {% if messages %}
+    <div class="messages">
+      {% for message in messages %}
+        <div class="message message-{{ message.tags }}">{{ message }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <div class="manage-columns">
+
+    <!-- QO'SHISH -->
+    <div class="panel">
+      <div class="panel-header">
+        <h2>Guruhga qo'shish</h2>
+        <span class="panel-count" id="add-count">0 tanlangan</span>
+      </div>
+
+      <form method="post">
+        {% csrf_token %}
+
+        <div class="search-box">
+          <input type="text" placeholder="Username bo'yicha qidirish..." class="search-input" data-target="add-list">
+        </div>
+
+        <div class="student-list" id="add-list">
+          {% for checkbox in add_form.students %}
+            <label class="student-item">
+              {{ checkbox.tag }}
+              <span class="student-name">{{ checkbox.choice_label }}</span>
+            </label>
+          {% empty %}
+            <p class="empty-hint">Qo'shiladigan student topilmadi.</p>
+          {% endfor %}
+        </div>
+
+        {% if add_form.students.errors %}
+          <div class="field-error">{{ add_form.students.errors|striptags }}</div>
+        {% endif %}
+
+        <button type="submit" name="add_submit" class="btn-submit btn-add-submit">
+          Guruhga qo'shish
+        </button>
+      </form>
+    </div>
+
+    <!-- CHIQARISH -->
+    <div class="panel">
+      <div class="panel-header">
+        <h2>Guruhdan chiqarish</h2>
+        <span class="panel-count" id="remove-count">0 tanlangan</span>
+      </div>
+
+      <form method="post">
+        {% csrf_token %}
+
+        <div class="search-box">
+          <input type="text" placeholder="Username bo'yicha qidirish..." class="search-input" data-target="remove-list">
+        </div>
+
+        <div class="student-list" id="remove-list">
+          {% for checkbox in remove_form.students %}
+            <label class="student-item">
+              {{ checkbox.tag }}
+              <span class="student-name">{{ checkbox.choice_label }}</span>
+            </label>
+          {% empty %}
+            <p class="empty-hint">Guruhda hozircha student yo'q.</p>
+          {% endfor %}
+        </div>
+
+        {% if remove_form.students.errors %}
+          <div class="field-error">{{ remove_form.students.errors|striptags }}</div>
+        {% endif %}
+
+        <button type="submit" name="remove_submit" class="btn-submit btn-remove-submit">
+          Guruhdan chiqarish
+        </button>
+      </form>
+    </div>
+
+  </div>
+
+</div>
+
+
+<style>
+
+.manage-wrap {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 30px;
+}
+
+.manage-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.manage-header h1 {
+  font-size: 26px;
+  font-weight: 700;
+  margin: 0;
+  color: #1f2937;
+}
+
+.page-subtitle {
+  margin: 4px 0 0;
+  font-size: 14px;
+  color: #8b95a5;
+}
+
+.btn-back {
+  font-size: 13px;
+  color: #4a6cf7;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.btn-back:hover {
+  text-decoration: underline;
+}
+
+.messages {
+  margin-bottom: 20px;
+}
+
+.message {
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+
+.message-success {
+  background: #ecfdf3;
+  color: #16a34a;
+}
+
+.message-error {
+  background: #fff0f0;
+  color: #e5484d;
+}
+
+.manage-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.panel {
+  background: #fff;
+  border: 1px solid #e7eaf0;
+  border-radius: 14px;
+  padding: 20px;
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.panel-header h2 {
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0;
+  color: #222b3c;
+}
+
+.panel-count {
+  font-size: 12px;
+  font-weight: 600;
+  color: #4a6cf7;
+  background: #eef1ff;
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+
+.search-box {
+  margin-bottom: 12px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 9px 12px;
+  border: 1px solid #d0d0d0;
+  border-radius: 8px;
+  font-size: 13px;
+  box-sizing: border-box;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #4a6cf7;
+}
+
+.student-list {
+  max-height: 320px;
+  overflow-y: auto;
+  border: 1px solid #edf0f5;
+  border-radius: 9px;
+  margin-bottom: 14px;
+}
+
+.student-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  font-size: 13px;
+  color: #374151;
+  cursor: pointer;
+  border-bottom: 1px solid #f2f3f6;
+  transition: background 0.15s;
+}
+
+.student-item:last-child {
+  border-bottom: none;
+}
+
+.student-item:hover {
+  background: #f8f9fc;
+}
+
+.student-item input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: #4a6cf7;
+}
+
+.student-name {
+  font-weight: 500;
+}
+
+.empty-hint {
+  padding: 20px 12px;
+  text-align: center;
+  font-size: 13px;
+  color: #8b95a5;
+}
+
+.field-error {
+  color: #d93025;
+  font-size: 12px;
+  margin-bottom: 10px;
+}
+
+.btn-submit {
+  width: 100%;
+  padding: 11px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.btn-add-submit {
+  background: #4a6cf7;
+  color: #fff;
+}
+
+.btn-add-submit:hover {
+  background: #3d5de0;
+}
+
+.btn-remove-submit {
+  background: #fff0f0;
+  color: #e5484d;
+}
+
+.btn-remove-submit:hover {
+  background: #ffe0e0;
+}
+
+@media (max-width: 800px) {
+  .manage-columns {
+    grid-template-columns: 1fr;
+  }
+}
+
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  function setupList(listId, countId) {
+    const list = document.getElementById(listId);
+    const count = document.getElementById(countId);
+    if (!list) return;
+
+    const checkboxes = list.querySelectorAll('input[type="checkbox"]');
+
+    function updateCount() {
+      const checked = list.querySelectorAll('input[type="checkbox"]:checked').length;
+      count.textContent = checked + ' tanlangan';
+    }
+
+    checkboxes.forEach(cb => cb.addEventListener('change', updateCount));
+    updateCount();
+  }
+
+  setupList('add-list', 'add-count');
+  setupList('remove-list', 'remove-count');
+
+  document.querySelectorAll('.search-input').forEach(function (input) {
+    input.addEventListener('input', function () {
+      const targetId = input.dataset.target;
+      const list = document.getElementById(targetId);
+      const query = input.value.toLowerCase();
+
+      list.querySelectorAll('.student-item').forEach(function (item) {
+        const name = item.querySelector('.student-name').textContent.toLowerCase();
+        item.style.display = name.includes(query) ? 'flex' : 'none';
+      });
+    });
+  });
+});
+</script>
+
+{% endblock %}

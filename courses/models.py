@@ -73,8 +73,19 @@ class Group(TimeStampedModel):
         related_name='groups',
     )
 
+    class Meta:
+        verbose_name = 'guruh'
+        verbose_name_plural = 'guruhlar'
+
     def __str__(self):
         return self.name
+
+    @property
+    def active_students(self):
+        return StudentProfile.objects.filter(
+            memberships__group=self,
+            memberships__is_active=True,
+        ).select_related('user')
 
 
 class GroupStudent(TimeStampedModel):

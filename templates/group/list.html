@@ -1,0 +1,379 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="kanban-wrap">
+
+  <div class="kanban-header">
+    <div>
+      <h1>Guruhlar</h1>
+      <p class="page-subtitle">Barcha guruhlarni boshqarish</p>
+    </div>
+
+    <a href="{% url 'group-create' %}" class="btn-add">
+      <span>+</span>
+      Yangi guruh
+    </a>
+  </div>
+
+  <div class="kanban-board">
+
+    {% for group in groups %}
+
+      <div class="kanban-card">
+
+        <div class="card-header">
+          <div class="course-icon">📚</div>
+          <div class="course-status">Faol</div>
+        </div>
+
+        <div class="card-content">
+
+          <h3 class="course-title">{{ group.name }}</h3>
+          <p class="course-description">{{ group.course.title }}</p>
+
+          <div class="course-info">
+            <div class="info-item">
+              <span class="info-label">O'qituvchi</span>
+              <span class="info-value">{{ group.teacher.user.username }}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Mentor</span>
+              <span class="info-value">{{ group.mentor.user.username|default:"—" }}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Boshlanish sanasi</span>
+              <span class="info-value">{{ group.start_date }}</span>
+            </div>
+          </div>
+
+          <div class="student-chips">
+            <span class="chips-label">Studentlar ({{ group.active_students.count }})</span>
+            <div class="chips-list">
+              {% for student in group.active_students %}
+                <span class="chip">{{ student.user.username }}</span>
+              {% empty %}
+                <span class="empty-hint-inline">Hozircha student yo'q</span>
+              {% endfor %}
+            </div>
+          </div>
+
+        </div>
+
+        <div class="card-actions">
+          <a href="{% url 'group-students-manage' group.id %}" class="btn-manage">👥 Studentlar</a>
+          <a href="#" class="btn-edit">✏️ Tahrirlash</a>
+          <a href="#" class="btn-delete">🗑 O'chirish</a>
+        </div>
+
+      </div>
+
+    {% empty %}
+
+      <div class="empty-state">
+        <div class="empty-icon">📚</div>
+        <h3>Guruh mavjud emas</h3>
+        <p>Hozircha hech qanday guruh qo'shilmagan.</p>
+        <a href="{% url 'group-create' %}" class="btn-add">+ Birinchi guruhni qo'shish</a>
+      </div>
+
+    {% endfor %}
+
+  </div>
+
+</div>
+
+
+<style>
+
+.kanban-wrap {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 30px;
+}
+
+.kanban-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28px;
+}
+
+.kanban-header h1 {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0;
+  color: #1f2937;
+}
+
+.page-subtitle {
+  margin: 6px 0 0;
+  font-size: 14px;
+  color: #8b95a5;
+}
+
+.btn-add {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: #4a6cf7;
+  color: #ffffff;
+  text-decoration: none;
+  padding: 11px 18px;
+  border-radius: 9px;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.btn-add:hover {
+  background: #3d5de0;
+  transform: translateY(-1px);
+  box-shadow: 0 5px 15px rgba(74, 108, 247, 0.25);
+}
+
+.kanban-board {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  align-items: stretch;
+}
+
+.kanban-card {
+  background: #ffffff;
+  border: 1px solid #e7eaf0;
+  border-radius: 14px;
+  padding: 20px;
+  min-height: 280px;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.25s ease;
+  box-shadow:
+    0 2px 5px rgba(0, 0, 0, 0.02),
+    0 6px 15px rgba(0, 0, 0, 0.03);
+}
+
+.kanban-card:hover {
+  transform: translateY(-4px);
+  border-color: #d9dff7;
+  box-shadow:
+    0 6px 15px rgba(0, 0, 0, 0.05),
+    0 12px 30px rgba(0, 0, 0, 0.06);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.course-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  background: #eef1ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 19px;
+}
+
+.course-status {
+  padding: 5px 10px;
+  border-radius: 20px;
+  background: #ecfdf3;
+  color: #16a34a;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.card-content {
+  flex: 1;
+}
+
+.course-title {
+  margin: 0 0 6px;
+  font-size: 18px;
+  font-weight: 700;
+  color: #222b3c;
+  line-height: 1.4;
+}
+
+.course-description {
+  margin: 0 0 16px;
+  font-size: 13px;
+  color: #777f8f;
+  line-height: 1.6;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.course-info {
+  background: #f8f9fc;
+  border-radius: 9px;
+  padding: 12px 13px;
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.info-label {
+  font-size: 12px;
+  color: #8b95a5;
+}
+
+.info-value {
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151;
+  text-align: right;
+}
+
+.student-chips {
+  margin-top: 4px;
+  margin-bottom: 16px;
+}
+
+.chips-label {
+  display: block;
+  font-size: 12px;
+  color: #8b95a5;
+  margin-bottom: 8px;
+}
+
+.chips-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.chip {
+  background: #eef1ff;
+  color: #4a6cf7;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+
+.empty-hint-inline {
+  font-size: 12px;
+  color: #b0b6c0;
+}
+
+.card-actions {
+  display: flex;
+  gap: 10px;
+  padding-top: 15px;
+  border-top: 1px solid #edf0f5;
+}
+
+.card-actions a {
+  flex: 1;
+  text-align: center;
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 8px 10px;
+  border-radius: 7px;
+  transition: 0.2s ease;
+}
+
+.btn-manage {
+  background: #f0f4ff;
+  color: #4a6cf7;
+}
+
+.btn-manage:hover {
+  background: #dfe5ff;
+}
+
+.btn-edit {
+  background: #eef1ff;
+  color: #4a6cf7;
+}
+
+.btn-edit:hover {
+  background: #dfe5ff;
+}
+
+.btn-delete {
+  background: #fff0f0;
+  color: #e5484d;
+}
+
+.btn-delete:hover {
+  background: #ffe0e0;
+}
+
+.empty-state {
+  grid-column: 1 / -1;
+  padding: 60px 30px;
+  text-align: center;
+  background: #ffffff;
+  border: 1px dashed #d7dce5;
+  border-radius: 14px;
+}
+
+.empty-icon {
+  font-size: 40px;
+  margin-bottom: 12px;
+}
+
+.empty-state h3 {
+  margin: 0 0 7px;
+  font-size: 18px;
+  color: #374151;
+}
+
+.empty-state p {
+  margin: 0 0 20px;
+  font-size: 13px;
+  color: #8b95a5;
+}
+
+@media (max-width: 900px) {
+  .kanban-board {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .kanban-wrap {
+    padding: 18px;
+  }
+
+  .kanban-header {
+    align-items: flex-start;
+    gap: 15px;
+    flex-direction: column;
+  }
+
+  .kanban-header h1 {
+    font-size: 24px;
+  }
+
+  .btn-add {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .kanban-board {
+    grid-template-columns: 1fr;
+  }
+}
+
+</style>
+
+{% endblock %}
