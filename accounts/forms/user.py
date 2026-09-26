@@ -1,11 +1,10 @@
-from email.policy import default
 
 from django import forms
 
 from accounts.models import CustomUser, TeacherProfile, StudentProfile
 
 
-class CustomUseForm(forms.ModelForm):
+class CustomUserForm(forms.ModelForm):
     is_teacher=forms.BooleanField(required=False)
     class Meta:
         model = CustomUser
@@ -16,6 +15,8 @@ class CustomUseForm(forms.ModelForm):
             "is_teacher"
 
         ]
+    # def clean_phone(self):
+    #     phone=self.cleaned_data.get('phone')
 
     def save(self, commit = True):
         phone=self.cleaned_data.get("phone")
@@ -28,7 +29,7 @@ class CustomUseForm(forms.ModelForm):
             username=username
         )
         if is_teacher:
-    
+
             TeacherProfile.objects.create(user=user)
             user.role='teacher'
             user.save()

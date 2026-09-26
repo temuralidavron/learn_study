@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>O'qituvchilar</h1>
+<p>{{ teachers }}</p>
+{% for akobir in teachers %}
+<p>{{ akobir.user.role }}</p>
+<p>{{ akobir.user.phone }}</p>
+<p>{{ akobir.user.username }}</p>
+<p>{{ akobir.user.password }}</p>
+<p>{{ akobir.user.id }}</p>
+<p>{{ akobir.id }}</p>
+
+<hr>
+
+{% endfor %}
+{% endblock %}

@@ -56,3 +56,8 @@ class StudentProfile(TimeStampedModel):
     def coin_balance(self):
         result = self.coin_transactions.aggregate(total=models.Sum('amount'))
         return result['total'] or 0
+
+
+#ORM  select * from Teacher    TeacherProfile.objects.all()
+# insert into customuser (name,parol)
+#values ('ali','11')

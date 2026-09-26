@@ -1,0 +1,9 @@
+{% extends 'accounts/teacher/teacher.html' %}
+{% block content %}
+<a href="{% url 'edit_teacher' %}">Edit</a>
+<p>Profile</p>
+<p>Username: {{ teacher.user.username }}</p>
+<p>Role: {{ teacher.user.role }}</p>
+<p>Specialization: {{ teacher.specialization }}</p>
+<p>Bio: {{ teacher.bio }}</p>
+{% endblock %}

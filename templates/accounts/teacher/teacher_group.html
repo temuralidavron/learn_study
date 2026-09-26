@@ -1,0 +1,8 @@
+{% extends 'accounts/teacher/teacher.html' %}
+{% block content %}
+<h1>Gruhlarim</h1>
+
+{% for group in groups %}
+<p>Gruop name {{ group.name }}</p>
+{% endfor %}
+{% endblock %}

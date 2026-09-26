@@ -1,8 +1,9 @@
 from django.contrib.auth import login, authenticate, logout
 from django.shortcuts import redirect, render
 
-from accounts.forms.user import CustomUseForm, LoginForm
-from accounts.models import TeacherProfile
+from accounts.forms.user import CustomUserForm, LoginForm
+from accounts.models import TeacherProfile, CustomUser
+
 
 def dashboard(request):
     return render(request,"base.html")
@@ -11,7 +12,7 @@ def dashboard(request):
 
 def create_user(request):
     if request.method=="POST":
-        form=CustomUseForm(request.POST)
+        form=CustomUserForm(request.POST)
         if form.is_valid():
             user=form.save()
             print(user)
@@ -23,7 +24,7 @@ def create_user(request):
                 login(request,user)
                 return redirect("dashboard")
     else:
-        form=CustomUseForm()
+        form=CustomUserForm()
     return render(request,"accounts/register.html",{'form':form})
 
 def login_view(request):
@@ -34,7 +35,10 @@ def login_view(request):
             password=form.cleaned_data.get("password")
             user=authenticate(username=username,password=password)
             if user:
+                teacher=user
                 login(request, user)
+                if teacher.role==CustomUser.Role.TEACHER:
+                    return redirect("teacher_dashboard")
                 return redirect("base")
     else:
         form=LoginForm()
@@ -46,7 +50,10 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
-    return redirect("base")
+    return redirect("dashboard")
 
+
+def teacher_dashboard(request):
+    return render(request,"accounts/teacher/teacher.html")
 
 
